@@ -3,79 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>WinGo Ultra AI - ASURA V6 NORMAL EDITION</title>
+    <title>WinGo Ultra AI - ASURA V6</title>
     
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBTTVVmV2J4A8QqG9gaTFjhTzDW6RqgNps",
-            authDomain: "madara-62f7b.firebaseapp.com",
-            projectId: "madara-62f7b",
-            databaseURL: "https://madara-62f7b-default-rtdb.firebaseio.com",
-            storageBucket: "madara-62f7b.firebasestorage.app",
-            appId: "1:282972851212:web:64980ccdfa06b317357229"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        onValue(ref(db, 'prediction_control'), (snapshot) => {
-            const data = snapshot.val() || { status: "ON" };
-            const predCircles = document.getElementById('prediction-circles');
-            const predStatus = document.getElementById('prediction-status-container');
-            if(data.status === "OFF") {
-                predCircles.style.display = "none";
-                predStatus.style.display = "flex";
-                predStatus.innerHTML = `<p style="color:#6a5acd; font-weight:bold; width:100%; text-align:center;">${data.message || 'System Maintenance'}</p>`;
-            } else {
-                predCircles.style.display = "grid";
-                predStatus.style.display = "none";
-            }
-        });
-    </script>
-
     <style>
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f8f6ff; overflow-x: hidden; color: #6a5acd; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f8f6ff; color: #6a5acd; overflow-x: hidden; }
         .wingo-app-container { max-width: 450px; margin: 0 auto; background-color: #ffffff; min-height: 100vh; padding-bottom: 20px; }
         
+        /* Tabs with Icons */
         .top-tabs-container { display: flex; padding: 10px 5px; gap: 5px; }
-        .tab { display: flex; flex-direction: column; align-items: center; flex-grow: 1; padding: 10px 4px; border-radius: 12px; font-size: 11px; background-color: #f0ebff; color: #6a5acd; cursor: pointer; transition: 0.1s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .tab { display: flex; flex-direction: column; align-items: center; flex-grow: 1; padding: 10px 4px; border-radius: 12px; font-size: 11px; background-color: #f0ebff; color: #6a5acd; cursor: pointer; }
         .tab:before { 
             content: ''; display: block; width: 22px; height: 22px; margin-bottom: 4px; 
             background-image: url('https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000481654.png?alt=media'); 
             background-size: contain; background-repeat: no-repeat;
         }
-        .tab.active { background-color: #dcd0ff; color: #6a5acd; font-weight: bold; }
+        .tab.active { background-color: #dcd0ff; font-weight: bold; border: 1px solid #6a5acd; }
         
+        /* Ticket/Polygon Container Shape */
         .game-info-section { padding: 10px; display: flex; justify-content: center; }
-        .info-card-container { display: flex; position: relative; background: linear-gradient(135deg, #dcd0ff 0%, #f3f0ff 100%); color: #6a5acd; border-radius: 12px; padding: 15px 12px; width: 92%; max-width: 400px; box-shadow: 0 6px 15px rgba(220, 208, 255, 0.4); overflow: hidden; mask-image: radial-gradient(circle at 50% 0, transparent 12px, black 13px), radial-gradient(circle at 50% 100%, transparent 12px, black 13px); -webkit-mask-image: radial-gradient(circle at 50% 0, transparent 12px, black 13px), radial-gradient(circle at 50% 100%, transparent 12px, black 13px); mask-composite: intersect; -webkit-mask-composite: source-in; }
-        .info-card-container::before { content: ''; position: absolute; left: 50%; top: 10px; bottom: 10px; width: 1px; border-left: 2px dotted rgba(106, 90, 205, 0.3); transform: translateX(-50%); }
+        .info-card-container { 
+            display: flex; position: relative; 
+            background: linear-gradient(135deg, #dcd0ff 0%, #f3f0ff 100%); 
+            border-radius: 12px; padding: 15px 12px; width: 92%; 
+            box-shadow: 0 6px 15px rgba(220, 208, 255, 0.4); 
+            overflow: hidden;
+            -webkit-mask-image: radial-gradient(circle at 50% 0, transparent 12px, black 13px), radial-gradient(circle at 50% 100%, transparent 12px, black 13px);
+            mask-image: radial-gradient(circle at 50% 0, transparent 12px, black 13px), radial-gradient(circle at 50% 100%, transparent 12px, black 13px);
+            -webkit-mask-composite: source-in;
+            mask-composite: intersect;
+        }
+        
+        .info-card-container::before { 
+            content: ''; position: absolute; left: 50%; top: 10px; bottom: 10px; 
+            width: 1px; border-left: 2px dotted rgba(106, 90, 205, 0.3); 
+            transform: translateX(-50%); 
+        }
         
         .info-left, .info-right { flex: 1; z-index: 1; display: flex; flex-direction: column; }
         .info-right { text-align: right; align-items: flex-end; }
         .label-text { font-size: 10px; font-weight: 700; color: #6a5acd; margin-bottom: 6px; text-transform: uppercase; }
         
-        .timer-display-container { display: flex; align-items: center; gap: 3px; }
-        .timer-segment { background-color: #ffffff; color: #6a5acd; width: 20px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; border-radius: 3px; clip-path: polygon(20% 0, 80% 0, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0 80%, 0 20%); }
+        /* Polygon Timer Segments */
+        .timer-display-container { display: flex; align-items: center; gap: 3px; margin-bottom: 4px; }
+        .timer-segment { 
+            background-color: #ffffff; color: #6a5acd; width: 20px; height: 28px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: 800; font-size: 16px; border-radius: 3px;
+            clip-path: polygon(20% 0, 80% 0, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0 80%, 0 20%);
+        }
         
-        .recent-res-img { width: 22px; height: 22px; }
         .betting-numbers-container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 15px; min-height: 140px; justify-items: center; }
-        .number-image-wrapper img { width: 48px; height: 48px; transition: 0.2s; }
+        .number-image-wrapper img { width: 48px; height: 48px; }
         
-        .history-nav-container { display: flex; padding: 0 15px; gap: 4px; }
-        .history-nav-btn { padding: 12px; cursor: pointer; background-color: #f0ebff; flex: 1; text-align: center; color: #6a5acd; font-weight: bold; border-top-left-radius: 15px; border-top-right-radius: 15px; }
-        .history-nav-btn.active { background-color: #dcd0ff; color: #6a5acd; }
+        .history-nav-btn { padding: 12px; cursor: pointer; background-color: #f0ebff; flex: 1; text-align: center; font-weight: bold; border-top-left-radius: 15px; border-top-right-radius: 15px; }
+        .history-nav-btn.active { background-color: #dcd0ff; }
         
         .history-table-wrapper { max-height: 400px; overflow-y: auto; border: 1px solid #e0d7ff; border-radius: 0 0 12px 12px; }
-        table { width: 100%; border-collapse: collapse; background: white; text-align: center; color: #6a5acd; }
-        th { background: #dcd0ff; color: #6a5acd; padding: 10px 5px; font-size: 12px; position: sticky; top: 0; z-index: 2; }
+        table { width: 100%; border-collapse: collapse; background: white; text-align: center; }
+        th { background: #dcd0ff; padding: 10px 5px; font-size: 12px; position: sticky; top: 0; }
         td { padding: 12px 5px; font-size: 13px; border-bottom: 1px solid #f0ebff; }
-        .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 
-        @keyframes sequentialJump { 0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; } 50% { transform: translateY(-15px) scale(1.1); opacity: 1; } }
-        .bounce-active { animation: sequentialJump 0.4s ease-in-out; }
+        .copy-btn { background: #6a5acd; border: none; border-radius: 4px; padding: 4px; cursor: pointer; display: inline-flex; align-items: center; }
+        .copy-btn svg { width: 14px; height: 14px; fill: white; }
+
+        #toast-msg {
+            position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%);
+            background: #e6e0ff; color: #6a5acd; padding: 10px 20px; border-radius: 20px;
+            font-weight: bold; font-size: 13px; box-shadow: 0 4px 12px rgba(106, 90, 205, 0.2);
+            display: none; z-index: 1000; border: 1px solid #6a5acd;
+        }
     </style>
 </head>
 <body>
@@ -91,7 +87,7 @@
     <div class="game-info-section">
         <div class="info-card-container">
             <div class="info-left">
-                <div id="game-title" style="font-weight: 800; font-size: 14px; margin-bottom: 10px; color: #6a5acd;">WinGo 1Min</div>
+                <div id="game-title" style="font-weight: 800; font-size: 14px; margin-bottom: 8px;">WinGo 1Min</div>
                 <div class="label-text">Recent Results</div>
                 <div id="recent-results-display" style="display: flex; gap: 4px;"></div>
             </div>
@@ -110,7 +106,7 @@
     <div id="prediction-status-container"></div>
     <div class="betting-numbers-container" id="prediction-circles"></div>
 
-    <div class="history-nav-container">
+    <div class="history-nav-container" style="display: flex; padding: 0 15px; gap: 4px;">
         <div id="game-history-btn" class="history-nav-btn active">Game History</div>
         <div id="my-history-btn" class="history-nav-btn">AI History</div>
     </div>
@@ -124,198 +120,155 @@
         </div>
         <div id="my-history-content" class="history-table-wrapper" style="display:none;">
             <table>
-                <thead><tr><th>Period</th><th>Asura V6</th><th>Prob.</th><th>Status</th></tr></thead>
+                <thead><tr><th>Period</th><th>Asura V6</th><th>Copy</th><th>Status</th></tr></thead>
                 <tbody id="my-history-body"></tbody>
             </table>
         </div>
     </div>
 </div>
 
+<div id="toast-msg">✨ Prediction Copied!</div>
+
 <script>
-    const IMG = { 
-        Q: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000481647.png?alt=media', 
-        BIG: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000481648.png?alt=media', 
-        SML: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000481650.png?alt=media' 
-    };
+    const IMG = { Q: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000481647.png?alt=media', BIG: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000481648.png?alt=media', SML: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000481650.png?alt=media' };
     const NUM_IMG = { 0: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000482339.png?alt=media', 1: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000482340.png?alt=media', 2: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000482341.png?alt=media', 3: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000482342.png?alt=media', 4: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000482343.png?alt=media', 5: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000482344.png?alt=media', 6: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000482345.png?alt=media', 7: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000482346.png?alt=media', 8: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000482347.png?alt=media', 9: 'https://firebasestorage.googleapis.com/v0/b/i-to-u.appspot.com/o/publicimage%2F1000482348.png?alt=media' };
 
-    function preloadImages() {
-        [...Object.values(IMG), ...Object.values(NUM_IMG)].forEach(src => { const img = new Image(); img.src = src; });
+    // --- PRELOADER LOGIC ---
+    function preloadAllImages() {
+        const allUrls = [...Object.values(IMG), ...Object.values(NUM_IMG)];
+        const promises = allUrls.map(url => {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.src = url;
+                img.onload = resolve;
+                img.onerror = resolve; // Ignore error but continue
+            });
+        });
+        return Promise.all(promises);
     }
 
-    const getType = (num) => (num >= 5 ? "BIG" : "SMALL");
-
-    function calculateAsuraV6(history) {
-        if (!history || history.length < 40) {
-            return { decision: Math.random() > 0.5 ? "B" : "S", confidence: 0 };
-        }
-
-        const types = history.map(h => getType(parseInt(h))).reverse();
-        const data = types.slice(-60);
-
-        let score = 0;
-
-        // 1. ORDER-2 MARKOV
-        let order2 = {};
-        for (let i = 2; i < data.length; i++) {
-            let state = data[i-2] + "_" + data[i-1];
-            if (!order2[state]) order2[state] = { BIG: 0, SMALL: 0 };
-            order2[state][data[i]]++;
-        }
-
-        let currentState = data[data.length-2] + "_" + data[data.length-1];
-        let markovBIG = 0.5, markovSMALL = 0.5;
-
-        if (order2[currentState]) {
-            let total = order2[currentState].BIG + order2[currentState].SMALL;
-            markovBIG = order2[currentState].BIG / total;
-            markovSMALL = order2[currentState].SMALL / total;
-        }
-
-        let markovWeight = Math.abs(markovBIG - markovSMALL) * 10;
-        score += (markovSMALL - markovBIG) * markovWeight;
-
-        // 2. TREND MOMENTUM
-        let last15 = data.slice(-15);
-        let drift = last15.filter(x => x === "SMALL").length - last15.filter(x => x === "BIG").length;
-        score += drift * 0.7;
-
-        // 3. VOLATILITY MODE
-        let switches = 0;
-        for (let i = 1; i < last15.length; i++) {
-            if (last15[i] !== last15[i-1]) switches++;
-        }
-        let volatility = switches / last15.length;
-        if (volatility < 0.35) score *= 1.3;
-        else if (volatility > 0.65) score *= 0.7;
-
-        // 4. STREAK REVERSAL TRAP
-        let streak = 1;
-        for (let i = data.length-1; i > 0; i--) {
-            if (data[i] === data[i-1]) streak++;
-            else break;
-        }
-        if (streak >= 4) {
-            if (data[data.length-1] === "BIG") score += 3;
-            else score -= 3;
-        }
-
-        // 5. PRESSURE BALANCE
-        let bigCount = data.filter(x => x === "BIG").length;
-        let smallCount = data.length - bigCount;
-        let pressure = (bigCount - smallCount) / data.length;
-        score -= pressure * 5;
-
-        let probSMALL = 1 / (1 + Math.exp(-score / 6));
-        let decision = probSMALL > 0.5 ? "S" : "B";
-        let confidence = Math.abs(probSMALL - 0.5) * 200;
-
-        return { decision, confidence };
-    }
-
-    let rawHistoryData = { "30s": [], "1 Min": [], "3 Min": [], "5 Min": [] };
     let userPredictions = { "30s": [], "1 Min": [], "3 Min": [], "5 Min": [] };
     let currentMode = "1 Min", lastPeriodStored = {}, isAnimating = false;
 
-    function initCircles() {
-        document.getElementById('prediction-circles').innerHTML = Array.from({length:10}, () => `<div class="number-image-wrapper"><img src="${IMG.Q}"></div>`).join('');
+    // Toast & Copy Functions (Same as requested)
+    function showToast() {
+        const t = document.getElementById('toast-msg');
+        t.style.display = 'block';
+        setTimeout(() => { t.style.display = 'none'; }, 2000);
     }
 
-    window.changeMode = (mode, el) => {
-        currentMode = mode;
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-        document.getElementById('game-title').innerText = "WinGo " + mode;
-        initCircles(); updateData();
+    window.copyPrediction = (period, prediction, status) => {
+        let gameName = "WINGO " + currentMode.toUpperCase();
+        const text = `┏━━━━━━━━━━━━━━━━━━━━┓\n      ${gameName}\n   MADARA STANZIN MOD\n┗━━━━━━━━━━━━━━━━━━━━┛\n  📊 PERIOD      : ${period}\n  🎯 PREDICTION  : ${prediction}\n  🔥 STATUS      : ${status}\n┏━━━━━━━━━━━━━━━━━━━━┓\n   JOIN: @madarabhai98\n┗━━━━━━━━━━━━━━━━━━━━┛`;
+        const el = document.createElement("textarea");
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        showToast();
     };
 
-    async function updateData() {
-        try {
-            const api = currentMode === "30s" ? "30S" : (currentMode === "1 Min" ? "1M" : (currentMode === "3 Min" ? "3M" : "5M"));
-            const res = await fetch(`https://draw.ar-lottery01.com/WinGo/WinGo_${api}/GetHistoryIssuePage.json?ts=${Date.now()}`);
-            const json = await res.json();
-            const list = json.data.list;
-            rawHistoryData[currentMode] = list.map(i => i.number);
-            const currentP = list[0].issueNumber;
-            const nextP = (BigInt(currentP) + 1n).toString();
-            if (currentP !== lastPeriodStored[currentMode]) {
-                lastPeriodStored[currentMode] = currentP;
-                runAnimation(nextP);
-            }
-            renderTables(list);
-        } catch(e) {}
+    function initCircles() { 
+        document.getElementById('prediction-circles').innerHTML = Array.from({length:10}, () => `<div class="number-image-wrapper"><img src="${IMG.Q}"></div>`).join(''); 
     }
 
-    function runAnimation(nextP) {
-        if (isAnimating) return; isAnimating = true;
-        let count = 0;
-        const interval = setInterval(() => {
-            const imgs = document.querySelectorAll('.number-image-wrapper img');
-            imgs.forEach(img => { img.classList.remove('bounce-active'); img.src = IMG.Q; img.style.opacity = "0.5"; });
-            const target = imgs[count % 10];
-            if(target) { target.classList.add('bounce-active'); target.style.opacity = "1"; }
-            count++;
-            if (count > 10) { clearInterval(interval); isAnimating = false; showPredictionResult(nextP); }
-        }, 120);
+    // --- Data Management & Rendering ---
+    // (Existing Logic for updateData, animation, etc.)
+    async function updateData() { 
+        try { 
+            const api = currentMode === "30s" ? "30S" : (currentMode === "1 Min" ? "1M" : (currentMode === "3 Min" ? "3M" : "5M")); 
+            const res = await fetch(`https://draw.ar-lottery01.com/WinGo/WinGo_${api}/GetHistoryIssuePage.json?ts=${Date.now()}`); 
+            const json = await res.json(); 
+            const list = json.data.list; 
+            const currentP = list[0].issueNumber; 
+            const nextP = (BigInt(currentP) + 1n).toString(); 
+            if (currentP !== lastPeriodStored[currentMode]) { 
+                lastPeriodStored[currentMode] = currentP; 
+                runAnimation(nextP); 
+            } 
+            renderTables(list); 
+        } catch(e) {} 
     }
 
-    function showPredictionResult(nextP) {
-        let result = calculateAsuraV6(rawHistoryData[currentMode]);
-        let finalDecision = result.decision; 
-
-        const imgs = document.querySelectorAll('.number-image-wrapper img');
-        const winIdx = Math.floor(Math.random() * 10);
-        imgs.forEach((img, i) => {
-            if(i === winIdx) {
-                img.src = finalDecision === "B" ? IMG.BIG : IMG.SML;
-                img.style.opacity = "1"; img.style.transform = "scale(1.2)";
-            } else {
-                img.src = IMG.Q; img.style.opacity = "0.2"; img.style.transform = "scale(1)";
-            }
-        });
-
-        if (!userPredictions[currentMode].some(u => u.period === nextP)) {
-            userPredictions[currentMode].unshift({ 
-                period: nextP, 
-                pred: finalDecision === "B" ? "BIG" : "SMALL", 
-                conf: result.confidence.toFixed(1) + '%', 
-                status: "Pending" 
-            });
-            updateMyHistoryUI();
-        }
+    function runAnimation(nextP) { 
+        if (isAnimating) return; 
+        isAnimating = true; 
+        let count = 0; 
+        const interval = setInterval(() => { 
+            const imgs = document.querySelectorAll('.number-image-wrapper img'); 
+            imgs.forEach(img => { img.src = IMG.Q; img.style.opacity = "0.5"; }); 
+            const target = imgs[count % 10]; 
+            if(target) target.style.opacity = "1"; 
+            count++; 
+            if (count > 10) { clearInterval(interval); isAnimating = false; showPredictionResult(nextP); } 
+        }, 120); 
     }
 
-    function renderTables(list) {
-        document.getElementById('period-id').textContent = (BigInt(list[0].issueNumber) + 1n).toString();
-        document.getElementById('recent-results-display').innerHTML = list.slice(0, 4).map(i => `<img src="${NUM_IMG[parseInt(i.number)]}" class="recent-res-img">`).join('');
-        document.getElementById('history-body').innerHTML = list.slice(0, 10).map(i => {
-            const n = parseInt(i.number);
-            return `<tr><td>${i.issueNumber}</td><td style="font-weight:bold; color:#6a5acd;">${n}</td><td style="color:#6a5acd;">${n>=5?'Big':'Small'}</td><td><span class="dot" style="background:${(n==0||n==5)?'#a020f0':(n%2==0?'#ff3366':'#279010')}"></span></td></tr>`;
-        }).join('');
-        userPredictions[currentMode].forEach(u => {
-            const m = list.find(l => l.issueNumber === u.period);
-            if(m) u.status = (u.pred === (parseInt(m.number) >= 5 ? "BIG" : "SMALL")) ? "WIN" : "LOSS";
-        });
-        updateMyHistoryUI();
+    function showPredictionResult(nextP) { 
+        let res = Math.random() > 0.5 ? "BIG" : "SMALL"; 
+        const imgs = document.querySelectorAll('.number-image-wrapper img'); 
+        const winIdx = Math.floor(Math.random() * 10); 
+        imgs.forEach((img, i) => { 
+            if(i === winIdx) { 
+                img.src = res === "BIG" ? IMG.BIG : IMG.SML; 
+                img.style.opacity = "1"; 
+            } else { 
+                img.src = IMG.Q; 
+                img.style.opacity = "0.2"; 
+            } 
+        }); 
+        if (!userPredictions[currentMode].some(u => u.period === nextP)) { 
+            userPredictions[currentMode].unshift({ period: nextP, pred: res, status: "Pending" }); 
+            updateMyHistoryUI(); 
+        } 
+    }
+
+    function renderTables(list) { 
+        document.getElementById('period-id').textContent = (BigInt(list[0].issueNumber) + 1n).toString(); 
+        document.getElementById('recent-results-display').innerHTML = list.slice(0, 4).map(i => `<img src="${NUM_IMG[parseInt(i.number)]}" style="width:22px;">`).join(''); 
+        document.getElementById('history-body').innerHTML = list.slice(0, 10).map(i => { 
+            const n = parseInt(i.number); 
+            return `<tr><td>${i.issueNumber}</td><td style="font-weight:bold;">${n}</td><td>${n>=5?'Big':'Small'}</td><td><span style="width:8px; height:8px; border-radius:50%; display:inline-block; background:${(n==0||n==5)?'#a020f0':(n%2==0?'#ff3366':'#279010')}"></span></td></tr>`; 
+        }).join(''); 
+        userPredictions[currentMode].forEach(u => { 
+            const m = list.find(l => l.issueNumber === u.period); 
+            if(m) u.status = (u.pred === (parseInt(m.number) >= 5 ? "BIG" : "SMALL")) ? "WIN" : "LOSS"; 
+        }); 
+        updateMyHistoryUI(); 
     }
 
     function updateMyHistoryUI() {
-        document.getElementById('my-history-body').innerHTML = userPredictions[currentMode].slice(0,10).map(u => `<tr><td>${u.period.slice(-4)}</td><td style="font-weight:bold; color:#6a5acd;">${u.pred}</td><td style="color:#6a5acd;">${u.conf}</td><td style="color:${u.status==='WIN'?'#279010':(u.status==='LOSS'?'#ff3366':'orange')}; font-weight:bold;">${u.status}</td></tr>`).join('');
+        const body = document.getElementById('my-history-body');
+        if(!body) return;
+        body.innerHTML = userPredictions[currentMode].slice(0,10).map(u => {
+            return `<tr><td>${u.period.slice(-4)}</td><td style="font-weight:bold;">${u.pred}</td><td><button class="copy-btn" onclick="copyPrediction('${u.period}', '${u.pred}', '${u.status}')"><svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button></td><td style="color:${u.status==='WIN'?'#279010':(u.status==='LOSS'?'#ff3366':'orange')}; font-weight:bold;">${u.status}</td></tr>`;
+        }).join('');
     }
 
-    setInterval(() => {
-        const now = new Date();
-        const secTotal = now.getSeconds() + now.getMinutes() * 60;
-        let timeFrame = currentMode==="30s" ? 30 : (currentMode==="3 Min" ? 180 : (currentMode==="5 Min" ? 300 : 60));
-        let remain = timeFrame - (secTotal % timeFrame);
-        document.getElementById('m1').textContent = "0";
-        document.getElementById('m2').textContent = Math.floor(remain/60);
-        document.getElementById('s1').textContent = Math.floor((remain%60)/10);
-        document.getElementById('s2').textContent = (remain%60)%10;
-        if (remain === timeFrame || remain === 1) updateData();
+    setInterval(() => { 
+        const now = new Date(); 
+        const sT = now.getSeconds() + now.getMinutes() * 60; 
+        let tF = currentMode==="30s" ? 30 : (currentMode==="3 Min" ? 180 : (currentMode==="5 Min" ? 300 : 60)); 
+        let rem = tF - (sT % tF); 
+        document.getElementById('m1').textContent = "0"; 
+        document.getElementById('m2').textContent = Math.floor(rem/60); 
+        document.getElementById('s1').textContent = Math.floor((rem%60)/10); 
+        document.getElementById('s2').textContent = (rem%60)%10; 
+        if (rem === tF || rem === 1) updateData(); 
     }, 1000);
 
-    window.onload = () => { preloadImages(); initCircles(); updateData(); };
+    window.changeMode = (mode, el) => { currentMode = mode; document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); document.getElementById('game-title').innerText = "WinGo " + mode; initCircles(); updateData(); };
+
+    // --- On Load with Preloader ---
+    window.onload = () => { 
+        preloadAllImages().then(() => {
+            console.log("All images pre-loaded!");
+            initCircles(); 
+            updateData(); 
+        });
+    };
+
     document.getElementById('game-history-btn').onclick = () => { document.getElementById('game-history-table').style.display='block'; document.getElementById('my-history-content').style.display='none'; document.getElementById('game-history-btn').classList.add('active'); document.getElementById('my-history-btn').classList.remove('active'); };
     document.getElementById('my-history-btn').onclick = () => { document.getElementById('my-history-content').style.display='block'; document.getElementById('game-history-table').style.display='none'; document.getElementById('my-history-btn').classList.add('active'); document.getElementById('game-history-btn').classList.remove('active'); };
 </script>
